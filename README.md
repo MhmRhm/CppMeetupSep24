@@ -16,6 +16,7 @@ interfaces or extend the current implementation with ease.
 5. [Tests and Coverage Reports](#tests-and-coverage-reports)
 6. [Documentation](#documentation)
 7. [Extending](#extending)
+8. [Internationalization](#internationalization)
 
 ## Before You Begin
 
@@ -241,3 +242,43 @@ Now, you should be able to run your program:
 
 > game.isFinished() = false  
 game.isFinished() = true
+
+## Internationalization
+
+On Linux, you can use `gettext` along with `std::locale`'s message facet to
+provide internationalization support. For more details, see
+[here](https://github.com/MhmRhm/cpplab/tree/main/locale).
+
+To add support for internationalization, run the following commands:
+
+```bash
+sudo apt-get install gettext
+xgettext --extract-all --c++ --output=terminal_toh.pot ./src/toh/terminal_toh.cpp
+cp terminal_toh.pot terminal_toh.po
+
+# Add translations
+vim terminal_toh.po
+
+msgfmt --check --output-file=terminal_toh.mo terminal_toh.po
+
+# Use the correct <language>
+sudo cp terminal_toh.mo /usr/share/locale/<language>/LC_MESSAGES/
+```
+You should add the `.pot` file to version control to ensure the translation
+template is tracked and readily available for translators.
+
+Afterwards, change your locale with the following commands:
+
+```bash
+# Generate locale
+sudo locale-gen ms_MY.UTF-8
+
+# Change locale
+export LC_ALL=ms_MY.UTF-8
+export LANG=ms_MY.UTF-8
+
+# Check the change
+locale
+```
+
+Now, if you run the application in the same terminal, you will see the translated text.

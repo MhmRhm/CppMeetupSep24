@@ -26,8 +26,9 @@ Element GameViewer::createLegend() const {
   updateCompletionTime();
 
   const string help_text{
-      "(q)->quit, (+/-)->add/remove disks, (a/j)->select left, "
-      "(s/k)->select middle, (d/l)->select right"};
+      m_facet.get(m_catalog, 0, 0,
+                  "(q)->quit, (+/-)->add/remove disks, (a/j)->select left, "
+                  "(s/k)->select middle, (d/l)->select right")};
 
   string duration{};
   if (m_completionDuration.count() > 0) {
@@ -82,7 +83,9 @@ void GameViewer::updateCompletionTime() const {
 }
 
 string GameViewer::formatCompletionDuration() const {
-  return format("Completed in {:.3f} (s)",
+  const string completed_text{m_facet.get(m_catalog, 0, 0, "Completed in")};
+
+  return format("{} {:.3f} (s)", completed_text,
                 duration_cast<milliseconds>(m_completionDuration).count() /
                     1000.0);
 }
