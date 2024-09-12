@@ -15,6 +15,7 @@ include(CppCheck)
 include(Doxygen)
 include(Format)
 
+add_subdirectory(demo)
 add_subdirectory(src bin)
 add_subdirectory(test)
 add_subdirectory(benchmark)
