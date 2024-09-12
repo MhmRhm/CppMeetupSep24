@@ -10,6 +10,11 @@
 
 #include "libtoh/toh_model.h"
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4820) // Padding warning
+#endif
+
 /**
  * @class GameViewer
  * @brief Responsible for rendering the visual representation of the Tower of
@@ -148,34 +153,15 @@ private:
   mutable std::chrono::steady_clock::time_point
       m_startTime{}; ///< The start time of the game session.
   mutable std::chrono::steady_clock::duration
-      m_completionDuration{}; ///< The time taken to complete the game, in
-                              ///< milliseconds.
-
-  /**
-   * @brief The system locale used for localization.
-   *
-   * This initializes a `std::locale` object with the system's default locale.
-   */
-  std::locale m_systemLocale{""};
-
-  /**
-   * @brief A reference to the messages facet used for retrieving localized
-   * messages.
-   *
-   * This facet is retrieved using `std::use_facet` and is used to handle
-   * message catalogs.
-   */
-  const std::messages<char> &m_facet{
-      std::use_facet<std::messages<char>>(m_systemLocale)};
-
-  /**
-   * @brief The message catalog for retrieving localized strings.
-   *
-   * This catalog is opened using the `m_facet` object and associated with the
-   * "terminal_toh" message catalog in the current system locale.
-   */
-  std::messages<char>::catalog m_catalog{
-      m_facet.open("terminal_toh", m_systemLocale)};
+      m_completionDuration{};     ///< The time taken to complete the game, in
+                                  ///< milliseconds.
+  std::locale m_systemLocale{""}; ///< The system locale used for localization.
+  const std::messages<char> &m_facet{std::use_facet<std::messages<char>>(
+      m_systemLocale)}; ///< A reference to the messages facet used for
+                        ///< retrieving localized messages.
+  std::messages<char>::catalog m_catalog{m_facet.open(
+      "terminal_toh", m_systemLocale)}; ///< The message catalog for retrieving
+                                        ///< localized strings.
 };
 
 /**
@@ -290,3 +276,7 @@ private:
   ftxui::ScreenInteractive
       &m_screen; ///< Reference to the FTXUI screen for rendering.
 };
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
